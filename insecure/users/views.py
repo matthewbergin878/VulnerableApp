@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.contrib.auth.decorators import login_required, user_passes_test
 import requests
+from django.db import connection
 
 def ssrf(request):
     url = request.GET.get('url')
@@ -27,3 +28,12 @@ def internal(request):
         return JsonResponse({'error': 'Access denied'}, status=403)
     #if the request was internal, return the secret resource
     return JsonResponse({'secret': 'This is a sensitive internal resource'})
+
+
+def search_users(request):
+    query = request.GET.get("query")
+    #directly include user input in the SQL query
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT * FROM users WHERE name LIKE '%{query}%'")
+        rows = cursor.fetchall()
+    return JsonResponse({"results": rows})
