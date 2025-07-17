@@ -42,13 +42,10 @@ def users(request):
 @api_view(['GET'])
 def hello(request):
     name = request.GET.get('firstname', 'guest')
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    password = body['pwd']
+    role = request.GET.get('role', 'user')  # Role is passed as a parameter
     data = {
         'firstname': name,
-        'cardnumber': "1239743628423",
-        'pwd': password,
-        'message': f"Hello {name}!"
+        'role': role,  # No validation of the role
+        'message': f"Hello {name}, you are logged in as {role}!"
     }
     return Response(data, status=200)
