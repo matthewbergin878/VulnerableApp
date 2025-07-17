@@ -39,7 +39,7 @@ def users(request):
     return HttpResponse(response.content, content_type="text/html")
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def hello(request):
     name = request.GET.get('firstname', 'guest')
     role = request.GET.get('role', 'user')  # Role is passed as a parameter
