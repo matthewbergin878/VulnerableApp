@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.db.models import F
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
@@ -31,6 +31,6 @@ def internal(request):
 
 def users(request):
     #vulnerable api
-    url = "https://brokencrystals.com/api/secrets"
+    url = "https://juice-shop.herokuapp.com/#/search"
     response = requests.get(url, verify=False)
-    return JsonResponse(response.json())
+    return HttpResponse(response.content, content_type="text/html")
