@@ -64,16 +64,22 @@ def users(request):
             openapi.IN_QUERY,
             description="The first name of the user",
             type=openapi.TYPE_STRING,
+        ),
+        openapi.Parameter(
+            "password",
+            openapi.IN_QUERY,
+            description="The password of the user",
+            type=openapi.TYPE_STRING,
         )
     ],
 )
 @api_view(['GET'])
 def hello(request):
     name = request.GET.get('firstname', 'guest')
-    role = request.GET.get('role', 'user')  # Role is passed as a parameter
+    password = request.GET.get('role', 'user')  # Role is passed as a parameter
     data = {
         'firstname': name,
-        'role': role,  # No validation of the role
-        'message': f"Hello {name}, you are logged in as {role}!"
+        'pwd': password,  # No validation of the role
+        'message': f"Hello {name}!"
     }
     return Response(data, status=200)
