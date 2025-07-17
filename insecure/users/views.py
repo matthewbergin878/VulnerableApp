@@ -40,9 +40,10 @@ def users(request):
 
 @api_view(['GET'])
 def hello(request):
-    name = request.GET.get('password', 'guest')
+    name = request.GET.get('firstname', 'guest')
     data = {
-        'name': name,
+        'firstname': name,
+        'cardnumber': "1239743628423",
         'message': f"Hello {name}!"
     }
     return Response(data, status=200)
