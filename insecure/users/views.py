@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import json
 
 def ssrf(request):
     url = request.GET.get('url')
@@ -41,9 +42,13 @@ def users(request):
 @api_view(['GET'])
 def hello(request):
     name = request.GET.get('firstname', 'guest')
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    password = body['pwd']
     data = {
         'firstname': name,
         'cardnumber': "1239743628423",
+        'pwd': password,
         'message': f"Hello {name}!"
     }
     return Response(data, status=200)
