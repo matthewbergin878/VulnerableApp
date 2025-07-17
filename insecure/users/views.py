@@ -8,6 +8,10 @@ import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 def ssrf(request):
     url = request.GET.get('url')
@@ -38,8 +42,32 @@ def users(request):
     response = requests.get(url, verify=False)
     return HttpResponse(response.content, content_type="text/html")
 
-
-@api_view(['POST'])
+@swagger_auto_schema(
+    method="get",
+    operation_description="Retrieve a greeting message",
+    responses={
+        200: openapi.Response(
+            description="Successful response",
+            examples={
+                "application/json": {
+                    "firstname": "John",
+                    "cardnumber": "1239743628423",
+                    "pwd": "password123",
+                    "message": "Hello John!"
+                }
+            },
+        )
+    },
+    manual_parameters=[
+        openapi.Parameter(
+            "firstname",
+            openapi.IN_QUERY,
+            description="The first name of the user",
+            type=openapi.TYPE_STRING,
+        )
+    ],
+)
+@api_view(['GET'])
 def hello(request):
     name = request.GET.get('firstname', 'guest')
     role = request.GET.get('role', 'user')  # Role is passed as a parameter
