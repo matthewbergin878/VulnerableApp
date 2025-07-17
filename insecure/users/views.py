@@ -5,7 +5,6 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.contrib.auth.decorators import login_required, user_passes_test
 import requests
-from django.db import connection
 
 def ssrf(request):
     url = request.GET.get('url')
@@ -30,10 +29,8 @@ def internal(request):
     return JsonResponse({'secret': 'This is a sensitive internal resource'})
 
 
-def search_users(request):
-    query = request.GET.get("query")
-    #directly include user input in the SQL query
-    with connection.cursor() as cursor:
-        cursor.execute(f"SELECT * FROM users WHERE name LIKE '%{query}%'")
-        rows = cursor.fetchall()
-    return JsonResponse({"results": rows})
+def users(request):
+    #vulnerable api
+    url = "https://brokencrystals.com/api/v1/userinfo/{email}?email=john.doe%40example.com"
+    response = requests.get(url, verify=False)
+    return JsonResponse(response.json())
