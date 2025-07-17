@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.contrib.auth.decorators import login_required, user_passes_test
 import requests
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 def ssrf(request):
     url = request.GET.get('url')
@@ -34,3 +36,13 @@ def users(request):
     url = "https://juice-shop.herokuapp.com/#/search"
     response = requests.get(url, verify=False)
     return HttpResponse(response.content, content_type="text/html")
+
+
+@api_view(['GET'])
+def hello(request):
+    name = request.GET.get('password', 'guest')
+    data = {
+        'name': name,
+        'message': f"Hello {name}!"
+    }
+    return Response(data, status=200)
