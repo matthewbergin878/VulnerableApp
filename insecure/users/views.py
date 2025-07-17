@@ -31,6 +31,6 @@ def internal(request):
 
 def users(request):
     #vulnerable api
-    url = "https://brokencrystals.com/api/v1/userinfo/{email}?email=john.doe%40example.com"
+    url = "https://brokencrystals.com/api/secrets"
     response = requests.get(url, verify=False)
     return JsonResponse(response.json())
